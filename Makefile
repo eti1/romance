@@ -6,4 +6,4 @@ qemu/Makefile: qemu/configure
 
 .PHONY: qemu
 qemu: qemu/Makefile
-	make -C qemu
+	CFLAGS=-g make -C qemu
