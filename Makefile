@@ -1,5 +1,5 @@
 MACHINE=myvirt
-DEBUG= #valgrind
+DEBUG= #gdb --args
 
 all: qemu
 
@@ -9,12 +9,13 @@ qemu/Makefile: qemu/configure
 
 .PHONY: qemu
 qemu:
-	CFLAGS=-g make -C qemu
+	CFLAGS="-g -Wno-missing-prototypes" make -C qemu
 
 .PHONY: rpm
 rpm:
 	make -C ld
 
-run: qemu rpm
+run: 
 	xterm -e "gdb-multiarch -x gdbinit" &
-	$(DEBUG) ./qemu/arm-softmmu/qemu-system-arm -M $(MACHINE) -s -S -bios ./ld/rom
+	$(DEBUG) ./qemu/arm-softmmu/qemu-system-arm -M $(MACHINE) -s -S \
+		-bios ./ld/rom 	-display gtk
